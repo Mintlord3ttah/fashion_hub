@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
@@ -61,6 +61,7 @@ export default function SearchPage() {
   const totalResults = results.products.length + results.orders.length + results.customers.length
 
   return (
+    <Suspense fallback={<div className="p-6 text-center text-gray-500">Loading search...</div>}>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -164,5 +165,6 @@ export default function SearchPage() {
         )}
       </div>
     </motion.div>
+    </Suspense>
   )
 }

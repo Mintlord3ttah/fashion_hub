@@ -1,19 +1,9 @@
 "use client";
 
+import { getGlobalAddNotification } from "@/context/NotificationContext";
 import type { NotificationItem } from "@/context/NotificationContext";
 
 type NotificationType = 'success' | 'error' | 'confirm';
-
-let addNotificationFn: ((notification: Omit<NotificationItem, 'id'>) => void) | null = null;
-
-/**
- * Call this from the NotificationProvider to wire the context's addNotification.
- */
-export function setNotificationDispatcher(
-  dispatcher: (notification: Omit<NotificationItem, 'id'>) => void
-) {
-  addNotificationFn = dispatcher;
-}
 
 export function showNotification(
   type: NotificationType,
@@ -21,8 +11,9 @@ export function showNotification(
   message: string,
   onConfirm?: () => void
 ) {
-  if (addNotificationFn) {
-    addNotificationFn({ type, title, message, onConfirm });
+  const addNotification = getGlobalAddNotification();
+  if (addNotification) {
+    addNotification({ type, title, message, onConfirm } as Omit<NotificationItem, 'id'>);
   } else {
     console.warn('Notification dispatcher not set. Wrap app with NotificationProvider.');
   }

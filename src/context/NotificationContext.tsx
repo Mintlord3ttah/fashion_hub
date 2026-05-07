@@ -3,6 +3,17 @@ import React, { createContext, useContext, useState, useCallback, useEffect, Rea
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertTriangle, X, Trash2 } from 'lucide-react';
 
+// Global dispatcher (avoids circular dependency)
+let globalAddNotification: ((n: Omit<NotificationItem, 'id'>) => void) | null = null;
+
+export function setGlobalAddNotification(fn: ((n: Omit<NotificationItem, 'id'>) => void) | null) {
+  globalAddNotification = fn;
+}
+
+export function getGlobalAddNotification() {
+  return globalAddNotification;
+}
+
 type NotificationType = 'success' | 'error' | 'confirm' | 'order' | 'inventory' | 'message';
 
 export interface NotificationItem {
@@ -39,14 +50,33 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [notificationId]);
 
-  // SSE stream will be initialized by a child component
-
-  // Register this addNotification with the compatibility layer
+  // Initialize SSE stream directly (avoids calling useNotification)
   useEffect(() => {
-    // Dynamically import to avoid circular dependency
-    import('@/components/Admin/Notification').then(mod => {
-      mod.setNotificationDispatcher(addNotification);
-    });
+    const source = new EventSource('/api/notifications/stream')
+    source.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data)
+        addNotification({
+          type: data.type,
+          title: data.title,
+          message: data.message,
+          link: data.link,
+        })
+      } catch (err) {
+        console.error('Failed to parse notification', err)
+      }
+    }
+    source.onerror = (err) => {
+      console.error('Notification stream error', err)
+      source.close()
+    }
+    return () => source.close()
+  }, [addNotification])
+
+  // Register addNotification with the global compatibility layer
+  useEffect(() => {
+    setGlobalAddNotification(addNotification);
+    return () => setGlobalAddNotification(null);
   }, [addNotification]);
 
   const removeNotification = (id: number) => {

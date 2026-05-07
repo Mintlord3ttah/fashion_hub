@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useNotification } from '@/context/NotificationContext'
-import { useNotificationStream } from '@/hooks/useNotificationStream'
 import Link from 'next/link'
 import { Sun, Moon, Bell, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -27,9 +26,6 @@ const dropdownRef = useRef<HTMLDivElement>(null)
       }
     }
   }, [])
-
-  // Initialize notification SSE stream
-  useNotificationStream();
 
   // Close dropdown on outside click
   useEffect(() => {
