@@ -48,18 +48,20 @@ export default function AnalyticsPage() {
         className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-100 dark:border-gray-800"
       >
         <h3 className="text-lg font-playfair mb-4 text-gray-900 dark:text-white">Revenue Trend</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data.revenueData || []}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-            <XAxis dataKey="month" stroke="#888" />
-            <YAxis stroke="#888" />
-            <Tooltip
-              contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
-              labelStyle={{ color: '#D4AF37' }}
-            />
-            <Line type="monotone" dataKey="revenue" stroke="#D4AF37" strokeWidth={2} dot={{ fill: '#D4AF37' }} />
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="w-full" style={{ height: '300px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data.revenueData || []}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="month" stroke="#888" />
+              <YAxis stroke="#888" />
+              <Tooltip
+                contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
+                labelStyle={{ color: '#D4AF37' }}
+              />
+              <Line type="monotone" dataKey="revenue" stroke="#D4AF37" strokeWidth={2} dot={{ fill: '#D4AF37' }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -71,17 +73,19 @@ export default function AnalyticsPage() {
           className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-100 dark:border-gray-800"
         >
           <h3 className="text-lg font-playfair mb-4 text-gray-900 dark:text-white">Orders by Month</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={data.analytics?.monthlyOrders || []}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-              <XAxis dataKey="month" stroke="#888" />
-              <YAxis stroke="#888" />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
-              />
-              <Bar dataKey="orders" fill="#D4AF37" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="w-full" style={{ height: '250px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data.analytics?.monthlyOrders || []}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                <XAxis dataKey="month" stroke="#888" />
+                <YAxis stroke="#888" />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
+                />
+                <Bar dataKey="orders" fill="#D4AF37" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </motion.div>
 
         {/* Traffic Sources */}
@@ -92,26 +96,28 @@ export default function AnalyticsPage() {
           className="bg-white dark:bg-[#1a1a1a] rounded-xl p-6 border border-gray-100 dark:border-gray-800"
         >
           <h3 className="text-lg font-playfair mb-4 text-gray-900 dark:text-white">Traffic Sources</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={data.analytics?.trafficSources || []}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {(data.analytics?.trafficSources || []).map((entry: any, index: number) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <div className="w-full" style={{ height: '250px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data.analytics?.trafficSources || []}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {(data.analytics?.trafficSources || []).map((entry: any, index: number) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#0B0B0B', border: 'none' }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
           <div className="flex justify-center gap-4 mt-4">
             {(data.analytics?.trafficSources || []).map((t: any, i: number) => (
               <div key={t.source} className="flex items-center gap-2">

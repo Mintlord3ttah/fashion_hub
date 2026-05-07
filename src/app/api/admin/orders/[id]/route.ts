@@ -6,10 +6,10 @@ const dataFilePath = path.resolve(process.cwd(), 'data', 'dashboard.json')
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id
+    const { id } = await params
     const updates = await request.json()
     const data = await fs.readFile(dataFilePath, 'utf8')
     const json = JSON.parse(data)
@@ -29,10 +29,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id
+    const { id } = await params
     const data = await fs.readFile(dataFilePath, 'utf8')
     const json = JSON.parse(data)
 

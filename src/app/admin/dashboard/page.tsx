@@ -19,6 +19,7 @@ interface DashboardData {
     productsTrend: number;
     customersTrend: number;
   };
+  revenueData: { month: string; revenue: number }[];
   categorySales: { category: string; percentage: number }[];
   topProducts: { name: string; sales: number; revenue: string; image: string }[];
   recentOrders: { id: string; customer: string; product: string; status: string; amount: string; date: string }[];

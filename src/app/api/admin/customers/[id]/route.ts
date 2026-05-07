@@ -6,17 +6,17 @@ const dataFilePath = path.resolve(process.cwd(), 'data', 'dashboard.json')
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
     const updates = await request.json()
     const data = await fs.readFile(dataFilePath, 'utf8')
     const json = JSON.parse(data)
 
     if (!json.customers) return NextResponse.json({ error: 'Customers not found' }, { status: 404 })
 
-    const index = json.customers.findIndex((c: any) => c.id === id)
+    const index = json.customers.findIndex((c: any) => c.id === parseInt(id))
     if (index === -1) return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
 
     json.customers[index] = { ...json.customers[index], ...updates }
@@ -29,16 +29,16 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id)
+    const { id } = await params
     const data = await fs.readFile(dataFilePath, 'utf8')
     const json = JSON.parse(data)
 
     if (!json.customers) return NextResponse.json({ error: 'Customers not found' }, { status: 404 })
 
-    json.customers = json.customers.filter((c: any) => c.id !== id)
+    json.customers = json.customers.filter((c: any) => c.id !== parseInt(id))
     await fs.writeFile(dataFilePath, JSON.stringify(json, null, 2), 'utf8')
     return NextResponse.json({ success: true })
   } catch (error) {

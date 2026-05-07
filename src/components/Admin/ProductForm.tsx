@@ -34,11 +34,12 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
   const [error, setError] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type } = e.target as HTMLInputElement | HTMLTextAreaElement;
+    const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
-    }))
+    }));
   }
 
   const handleSubmit = async (e: FormEvent) => {

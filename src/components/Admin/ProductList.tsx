@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import ProductForm from './ProductForm'
+import { showConfirm, showError, showSuccess } from '@/components/Admin/Notification'
 
 interface Product {
   id: number
@@ -38,18 +39,20 @@ export default function ProductList() {
   }, [])
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this product?')) return
-    try {
-      const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
-      const data = await res.json()
-      if (data.success) {
-        fetchProducts()
-      } else {
-        alert('Delete failed')
+    showConfirm('Delete Product', 'Are you sure you want to delete this product?', async () => {
+      try {
+        const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+        const data = await res.json()
+        if (data.success) {
+          showSuccess('Deleted', 'Product successfully deleted')
+          fetchProducts()
+        } else {
+          showError('Delete Failed', data.error || 'Failed to delete product')
+        }
+      } catch (err: any) {
+        showError('Delete Failed', err.message || 'Failed to delete product')
       }
-    } catch (err) {
-      alert('Delete failed')
-    }
+    })
   }
 
   const handleEdit = (product: Product) => {

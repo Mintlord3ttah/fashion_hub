@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const response = await fetch('/api/admin/login', {
       method: 'POST',
