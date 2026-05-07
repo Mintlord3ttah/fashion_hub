@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "image": "/Evening_Dress.jfif",
+    "title": "Evening Dress",
+    "description": "Silk chiffon evening gown with intricate beading",
+    "price": "$2,850",
+    "category": "Evening Wear",
+    "isNew": false,
+    "isLimited": true
+  },
+  {
+    "id": 2,
+    "image": "/Luxury_Casual_Wear.jfif",
+    "title": "Luxury Casual Wear",
+    "description": "Cashmere blend sweater with tailored trousers",
+    "price": "$1,250",
+    "category": "Casual",
+    "isNew": false,
+    "isLimited": false
+  },
+  {
+    "id": 3,
+    "image": "/pearl_blouse.jfif",
+    "title": "Statement Piece",
+    "description": "Embroidered silk blouse with pearl details",
+    "price": "$1,980",
+    "category": "Tops",
+    "isNew": true,
+    "isLimited": false
+  },
+  {
+    "id": 4,
+    "image": "/Velvet_coat.jfif",
+    "title": "Limited Edition",
+    "description": "Exclusive velvet coat with fur trim",
+    "price": "$4,200",
+    "category": "Outerwear",
+    "isNew": false,
+    "isLimited": true
+  },
+  {
+    "id": 5,
+    "image": "/leather_bag_shoes.jfif",
+    "title": "Accessories Set",
+    "description": "Leather clutch with matching belt",
+    "price": "$890",
+    "category": "Accessories",
+    "isNew": true,
+    "isLimited": false
+  },
+  {
+    "id": 6,
+    "image": "/formal_suit.jfif",
+    "title": "Formal Suit",
+    "description": "Tailored wool suit with satin lapels",
+    "price": "$2,400",
+    "category": "Suits",
+    "isNew": false,
+    "isLimited": false
+  },
+  {
+    "id": 7,
+    "image": "/summer_dress.jfif",
+    "title": "Summer Dress",
+    "description": "Lightweight linen dress in pastel tones",
+    "price": "$1,100",
+    "category": "Dresses",
+    "isNew": true,
+    "isLimited": false
+  },
+  {
+    "id": 8,
+    "image": "/earings.jfif",
+    "title": "Jewelry Set",
+    "description": "Pearl necklace with matching earrings",
+    "price": "$5,500",
+    "category": "Jewelry",
+    "isNew": false,
+    "isLimited": true
+  }
+]

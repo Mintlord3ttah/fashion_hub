@@ -1,0 +1,545 @@
+{
+  "stats": {
+    "totalRevenue": "$284,500",
+    "totalOrders": 1284,
+    "productsSold": 3472,
+    "activeCustomers": 892,
+    "revenueTrend": 12,
+    "ordersTrend": 8,
+    "productsTrend": 15,
+    "customersTrend": -3
+  },
+  "revenueData": [
+    {
+      "month": "Jan",
+      "revenue": 12000
+    },
+    {
+      "month": "Feb",
+      "revenue": 19000
+    },
+    {
+      "month": "Mar",
+      "revenue": 15000
+    },
+    {
+      "month": "Apr",
+      "revenue": 22000
+    },
+    {
+      "month": "May",
+      "revenue": 28000
+    },
+    {
+      "month": "Jun",
+      "revenue": 25000
+    },
+    {
+      "month": "Jul",
+      "revenue": 32000
+    },
+    {
+      "month": "Aug",
+      "revenue": 38000
+    },
+    {
+      "month": "Sep",
+      "revenue": 35000
+    },
+    {
+      "month": "Oct",
+      "revenue": 42000
+    },
+    {
+      "month": "Nov",
+      "revenue": 48000
+    },
+    {
+      "month": "Dec",
+      "revenue": 55000
+    }
+  ],
+  "categorySales": [
+    {
+      "category": "Evening Wear",
+      "percentage": 35
+    },
+    {
+      "category": "Casual",
+      "percentage": 25
+    },
+    {
+      "category": "Outerwear",
+      "percentage": 18
+    },
+    {
+      "category": "Accessories",
+      "percentage": 12
+    },
+    {
+      "category": "Jewelry",
+      "percentage": 10
+    }
+  ],
+  "topProducts": [
+    {
+      "name": "Evening Dress",
+      "sales": 124,
+      "revenue": "$353,400",
+      "image": "/Evening_Dress.jfif"
+    },
+    {
+      "name": "Limited Edition Velvet Coat",
+      "sales": 98,
+      "revenue": "$411,600",
+      "image": "/Velvet_coat.jfif"
+    },
+    {
+      "name": "Statement Piece Blouse",
+      "sales": 87,
+      "revenue": "$172,260",
+      "image": "/pearl_blouse.jfif"
+    },
+    {
+      "name": "Jewelry Set",
+      "sales": 76,
+      "revenue": "$418,000",
+      "image": "/earings.jfif"
+    }
+  ],
+  "recentOrders": [
+    {
+      "id": "ORD-001",
+      "customer": "Sophia Martinez",
+      "product": "Evening Dress",
+      "status": "Delivered",
+      "amount": "$2,850",
+      "date": "2026-04-15"
+    },
+    {
+      "id": "ORD-002",
+      "customer": "Emma Thompson",
+      "product": "Luxury Casual Wear",
+      "status": "Processing",
+      "amount": "$1,250",
+      "date": "2026-04-18"
+    },
+    {
+      "id": "ORD-003",
+      "customer": "Victoria Chang",
+      "product": "Statement Piece",
+      "status": "Shipped",
+      "amount": "$1,980",
+      "date": "2026-04-20"
+    },
+    {
+      "id": "ORD-004",
+      "customer": "Isabella Rossi",
+      "product": "Limited Edition",
+      "status": "Pending",
+      "amount": "$4,200",
+      "date": "2026-04-22"
+    },
+    {
+      "id": "ORD-005",
+      "customer": "Charlotte Lee",
+      "product": "Accessories Set",
+      "status": "Delivered",
+      "amount": "$890",
+      "date": "2026-04-25"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-001",
+      "customer": "Sophia Martinez",
+      "email": "sophia@email.com",
+      "product": "Evening Dress",
+      "status": "Delivered",
+      "amount": "$2,850",
+      "date": "2026-04-15"
+    },
+    {
+      "id": "ORD-002",
+      "customer": "Emma Thompson",
+      "email": "emma@email.com",
+      "product": "Luxury Casual Wear",
+      "status": "Processing",
+      "amount": "$1,250",
+      "date": "2026-04-18"
+    },
+    {
+      "id": "ORD-003",
+      "customer": "Victoria Chang",
+      "email": "victoria@email.com",
+      "product": "Statement Piece",
+      "status": "Shipped",
+      "amount": "$1,980",
+      "date": "2026-04-20"
+    },
+    {
+      "id": "ORD-004",
+      "customer": "Isabella Rossi",
+      "email": "isabella@email.com",
+      "product": "Limited Edition",
+      "status": "Pending",
+      "amount": "$4,200",
+      "date": "2026-04-22"
+    },
+    {
+      "id": "ORD-005",
+      "customer": "Charlotte Lee",
+      "email": "charlotte@email.com",
+      "product": "Accessories Set",
+      "status": "Delivered",
+      "amount": "$890",
+      "date": "2026-04-25"
+    },
+    {
+      "id": "ORD-006",
+      "customer": "Amelia Wang",
+      "email": "amelia@email.com",
+      "product": "Formal Suit",
+      "status": "Processing",
+      "amount": "$2,400",
+      "date": "2026-04-26"
+    },
+    {
+      "id": "ORD-007",
+      "customer": "Olivia Brown",
+      "email": "olivia@email.com",
+      "product": "Summer Dress",
+      "status": "Shipped",
+      "amount": "$1,100",
+      "date": "2026-04-27"
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "name": "Sophia Martinez",
+      "email": "sophia@email.com",
+      "phone": "+1 555-0101",
+      "orders": 12,
+      "spent": "$24,600",
+      "joined": "2025-08-15"
+    },
+    {
+      "id": 2,
+      "name": "Emma Thompson",
+      "email": "emma@email.com",
+      "phone": "+1 555-0102",
+      "orders": 8,
+      "spent": "$16,200",
+      "joined": "2025-09-22"
+    },
+    {
+      "id": 3,
+      "name": "Victoria Chang",
+      "email": "victoria@email.com",
+      "phone": "+1 555-0103",
+      "orders": 15,
+      "spent": "$31,800",
+      "joined": "2025-06-10"
+    },
+    {
+      "id": 4,
+      "name": "Isabella Rossi",
+      "email": "isabella@email.com",
+      "phone": "+1 555-0104",
+      "orders": 6,
+      "spent": "$18,400",
+      "joined": "2025-11-05"
+    },
+    {
+      "id": 5,
+      "name": "Charlotte Lee",
+      "email": "charlotte@email.com",
+      "phone": "+1 555-0105",
+      "orders": 9,
+      "spent": "$11,200",
+      "joined": "2026-01-18"
+    },
+    {
+      "id": 6,
+      "name": "Amelia Wang",
+      "email": "amelia@email.com",
+      "phone": "+1 555-0106",
+      "orders": 4,
+      "spent": "$8,600",
+      "joined": "2026-02-20"
+    },
+    {
+      "id": 7,
+      "name": "Olivia Brown",
+      "email": "olivia@email.com",
+      "phone": "+1 555-0107",
+      "orders": 11,
+      "spent": "$19,300",
+      "joined": "2025-10-12"
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Evening Dress",
+      "sku": "EVE-001",
+      "stock": 12,
+      "threshold": 5,
+      "status": "In Stock"
+    },
+    {
+      "id": 2,
+      "name": "Luxury Casual Wear",
+      "sku": "CAS-002",
+      "stock": 24,
+      "threshold": 10,
+      "status": "In Stock"
+    },
+    {
+      "id": 3,
+      "name": "Statement Piece",
+      "sku": "STA-003",
+      "stock": 3,
+      "threshold": 5,
+      "status": "Low Stock"
+    },
+    {
+      "id": 4,
+      "name": "Limited Edition",
+      "sku": "LIM-004",
+      "stock": 0,
+      "threshold": 2,
+      "status": "Out of Stock"
+    },
+    {
+      "id": 5,
+      "name": "Accessories Set",
+      "sku": "ACC-005",
+      "stock": 18,
+      "threshold": 8,
+      "status": "In Stock"
+    },
+    {
+      "id": 6,
+      "name": "Formal Suit",
+      "sku": "FOR-006",
+      "stock": 7,
+      "threshold": 5,
+      "status": "In Stock"
+    },
+    {
+      "id": 7,
+      "name": "Summer Dress",
+      "sku": "SUM-007",
+      "stock": 2,
+      "threshold": 5,
+      "status": "Low Stock"
+    },
+    {
+      "id": 8,
+      "name": "Jewelry Set",
+      "sku": "JEW-008",
+      "stock": 15,
+      "threshold": 5,
+      "status": "In Stock"
+    }
+  ],
+  "analytics": {
+    "trafficSources": [
+      {
+        "source": "Direct",
+        "value": 4000
+      },
+      {
+        "source": "Social",
+        "value": 3000
+      },
+      {
+        "source": "Search",
+        "value": 2000
+      },
+      {
+        "source": "Referral",
+        "value": 1000
+      }
+    ],
+    "monthlyOrders": [
+      {
+        "month": "Jan",
+        "orders": 45
+      },
+      {
+        "month": "Feb",
+        "orders": 62
+      },
+      {
+        "month": "Mar",
+        "orders": 51
+      },
+      {
+        "month": "Apr",
+        "orders": 78
+      },
+      {
+        "month": "May",
+        "orders": 94
+      },
+      {
+        "month": "Jun",
+        "orders": 82
+      },
+      {
+        "month": "Jul",
+        "orders": 105
+      },
+      {
+        "month": "Aug",
+        "orders": 124
+      },
+      {
+        "month": "Sep",
+        "orders": 115
+      },
+      {
+        "month": "Oct",
+        "orders": 138
+      },
+      {
+        "month": "Nov",
+        "orders": 156
+      },
+      {
+        "month": "Dec",
+        "orders": 178
+      }
+    ]
+  },
+  "messages": [
+    {
+      "id": 1,
+      "name": "Sophia Martinez",
+      "email": "sophia@email.com",
+      "subject": "Order status inquiry",
+      "preview": "Hi, I was wondering about the status of my order ORD-001...",
+      "date": "2026-04-28",
+      "read": false
+    },
+    {
+      "id": 2,
+      "name": "Emma Thompson",
+      "email": "emma@email.com",
+      "subject": "Return request",
+      "preview": "Hello, I would like to return the Luxury Casual Wear...",
+      "date": "2026-04-27",
+      "read": true
+    },
+    {
+      "id": 3,
+      "name": "Victoria Chang",
+      "email": "victoria@email.com",
+      "subject": "Product question",
+      "preview": "Is the Statement Piece available in size M?",
+      "date": "2026-04-26",
+      "read": false
+    },
+    {
+      "id": 4,
+      "name": "Isabella Rossi",
+      "email": "isabella@email.com",
+      "subject": "Shipping delay",
+      "preview": "My order ORD-004 has not arrived yet...",
+      "date": "2026-04-25",
+      "read": true
+    },
+    {
+      "id": 5,
+      "name": "Charlotte Lee",
+      "email": "charlotte@email.com",
+      "subject": "Feedback",
+      "preview": "Just wanted to say how much I love the Accessories Set...",
+      "date": "2026-04-24",
+      "read": true
+    }
+  ],
+  "discounts": [
+    {
+      "id": 1,
+      "code": "WELCOME10",
+      "type": "Percentage",
+      "value": "10%",
+      "expiry": "2026-08-01",
+      "usage": "45/100",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "code": "SUMMER20",
+      "type": "Percentage",
+      "value": "20%",
+      "expiry": "2026-06-30",
+      "usage": "120/200",
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "code": "FLAT50",
+      "type": "Fixed",
+      "value": "$50",
+      "expiry": "2026-05-15",
+      "usage": "12/50",
+      "status": "Expired"
+    },
+    {
+      "id": 4,
+      "code": "VIP25",
+      "type": "Percentage",
+      "value": "25%",
+      "expiry": "2026-12-31",
+      "usage": "8/∞",
+      "status": "Active"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Sophia Martinez",
+      "product": "Evening Dress",
+      "rating": 5,
+      "comment": "Absolutely stunning piece. Quality unmatched.",
+      "status": "Pending"
+    },
+    {
+      "id": 2,
+      "name": "Emma Thompson",
+      "product": "Luxury Casual Wear",
+      "rating": 4,
+      "comment": "Feels great, worth every penny.",
+      "status": "Approved"
+    },
+    {
+      "id": 3,
+      "name": "Victoria Chang",
+      "product": "Statement Piece",
+      "rating": 5,
+      "comment": "Attention to detail is remarkable.",
+      "status": "Approved"
+    },
+    {
+      "id": 4,
+      "name": "Isabella Rossi",
+      "product": "Limited Edition",
+      "rating": 2,
+      "comment": "The fur trim shed a bit. Expected better.",
+      "status": "Pending"
+    },
+    {
+      "id": 5,
+      "name": "Charlotte Lee",
+      "product": "Accessories Set",
+      "rating": 5,
+      "comment": "Perfect match, love the leather quality.",
+      "status": "Approved"
+    }
+  ]
+}
