@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { Search, Filter, Download, Eye, Pencil, Trash2 } from 'lucide-react'
+import { showConfirm, showSuccess, showError } from '@/components/Admin/Notification'
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<any[]>([])
@@ -111,7 +112,7 @@ export default function CustomersPage() {
                   <td className="p-4">
                     <div className="flex gap-2">
                       <button
-                        onClick={() => alert('View customer profile: ' + c.name)}
+                        onClick={() => showSuccess('View Customer', `View customer profile: ${c.name}`)}
                         className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-blue-600"
                       ><Eye size={16} /></button>
                       <button

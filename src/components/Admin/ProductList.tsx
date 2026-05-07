@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import ProductForm from './ProductForm'
-import { showConfirm, showError, showSuccess } from '@/components/Admin/Notification'
+import { useNotification } from '@/context/NotificationContext'
 
 interface Product {
   id: number

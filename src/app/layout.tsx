@@ -1,6 +1,9 @@
+
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
+import { NotificationProvider } from "@/context/NotificationContext";
+import Head from "next/head";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -28,7 +31,25 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <Head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch(e) {}
+              `,
+            }}
+          />
+        </Head>
+        <NotificationProvider>
+          {children}
+        </NotificationProvider>
+      </body>
     </html>
   );
 }

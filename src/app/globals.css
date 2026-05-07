@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Dark mode variant for class strategy */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Custom Color Theme */
 :root {
   --background: #ffffff;
@@ -8,6 +11,11 @@
   --gold-hover: #A67E5B;
   --beige: #F5F0E6;
   --beige-hover: #E0D5C5;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #edf0f9;
 }
 
 /* Typography */
@@ -45,11 +53,4 @@ body {
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #edf0f9;
-  }
 }

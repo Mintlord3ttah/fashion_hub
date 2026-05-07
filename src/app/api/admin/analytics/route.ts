@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const data = await fs.readFile(dataFilePath, 'utf8')
     const json = JSON.parse(data)
-    return NextResponse.json(json.analytics || {})
+    return NextResponse.json(json)
   } catch (error) {
     return NextResponse.json({ error: 'Failed to load analytics' }, { status: 500 })
   }

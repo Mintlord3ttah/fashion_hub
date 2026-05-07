@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { AlertTriangle, Package, Pencil, Trash2 } from 'lucide-react'
+import { showConfirm, showSuccess } from '@/components/Admin/Notification'
 
 export default function InventoryPage() {
   const [inventory, setInventory] = useState<any[]>([])
@@ -116,10 +117,11 @@ export default function InventoryPage() {
                     ><Pencil size={16} /></button>
                     <button
                       onClick={() => {
-                        if (confirm('Delete item ' + item.name + '?')) {
-                          fetch(`/api/admin/inventory/${item.id}`, { method: 'DELETE' })
-                            .then(() => setInventory(prev => prev.filter(i => i.id !== item.id)))
-                        }
+                        showConfirm('Delete Item', `Delete item ${item.name}?`, async () => {
+                          await fetch(`/api/admin/inventory/${item.id}`, { method: 'DELETE' })
+                          setInventory(prev => prev.filter(i => i.id !== item.id))
+                          showSuccess('Deleted', 'Item deleted successfully')
+                        })
                       }}
                       className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600"
                     ><Trash2 size={16} /></button>

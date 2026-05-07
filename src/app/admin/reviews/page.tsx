@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { Search, Check, X, Star } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { showConfirm, showSuccess } from '@/components/Admin/Notification'
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([])
@@ -92,15 +93,15 @@ export default function ReviewsPage() {
                     ><Check size={16} /></button>
                     <button
                       onClick={() => {
-                        if (confirm('Reject review from ' + r.name + '?')) {
-                          fetch(`/api/admin/reviews/${r.id}`, {
+                        showConfirm('Reject Review', `Reject review from ${r.name}?`, async () => {
+                          await fetch(`/api/admin/reviews/${r.id}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ status: 'Rejected' })
-                          }).then(() => {
-                            setReviews(prev => prev.map(rev => rev.id === r.id ? {...rev, status: 'Rejected'} : rev))
                           })
-                        }
+                          setReviews(prev => prev.map(rev => rev.id === r.id ? {...rev, status: 'Rejected'} : rev))
+                          showSuccess('Rejected', 'Review rejected')
+                        })
                       }}
                       className="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
                     ><X size={16} /></button>
