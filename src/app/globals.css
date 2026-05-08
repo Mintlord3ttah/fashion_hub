@@ -11,6 +11,8 @@
   --gold-hover: #A67E5B;
   --beige: #F5F0E6;
   --beige-hover: #E0D5C5;
+  --font-playfair: 'Playfair Display', serif;
+  --font-montserrat: 'Montserrat', sans-serif;
 }
 
 .dark {

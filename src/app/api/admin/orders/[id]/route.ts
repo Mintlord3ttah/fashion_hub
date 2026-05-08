@@ -4,6 +4,21 @@ import path from 'node:path'
 
 const dataFilePath = path.resolve(process.cwd(), 'data', 'dashboard.json')
 
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const data = await fs.readFile(dataFilePath, 'utf8');
+    const json = JSON.parse(data);
+    const order = (json.orders || []).find((o: any) => o.id === id);
+    if (!order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+    return NextResponse.json(order);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to load order' }, { status: 500 });
+  }
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

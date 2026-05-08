@@ -1,10 +1,12 @@
 "use client"
 
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Search, Filter, Download, Eye, Pencil, Trash2 } from 'lucide-react'
 import { showConfirm, showSuccess } from '@/components/Admin/Notification'
 import { exportToCSV, formatOrdersForExport } from '@/lib/export'
+import Link from 'next/link'
 
 const statusColors: Record<string, string> = {
   Delivered: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
@@ -43,6 +45,7 @@ export default function OrdersPage() {
       o.customer?.toLowerCase().includes(search.toLowerCase())
     return matchStatus && matchSearch
   })
+    const router = useRouter()
 
   const handleExport = () => {
     const data = formatOrdersForExport(filtered)
@@ -193,6 +196,7 @@ export default function OrdersPage() {
                   className={`border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors ${
                     selectedOrderIds.includes(order.id) ? 'bg-gray-50 dark:bg-gray-800/20' : ''
                   }`}
+                  onClick={() => router.push(`/admin/orders/${order.id}`)}
                 >
                   <td className="p-2">
                     <div className="flex items-center">
@@ -210,14 +214,14 @@ export default function OrdersPage() {
                       />
                     </div>
                   </td>
-                  <td className="p-4 font-medium text-gray-900 dark:text-white">{order.id}</td>
+                  <td className="p-4 font-medium text-gray-900 dark:text-white"><Link href={`/admin/orders/${order.id}`} className="text-blue-600 hover:underline">{order.id}</Link></td>
                   <td className="p-4">
                     <div>
                       <p className="text-gray-900 dark:text-white">{order.customer}</p>
                       <p className="text-xs text-gray-400">{order.email}</p>
                     </div>
                   </td>
-                  <td className="p-4 text-gray-600 dark:text-gray-300">{order.product}</td>
+                  <td className="p-4 text-gray-600 dark:text-gray-300">{order.items && order.items.length > 1 ? `${order.items[0].title} +${order.items.length - 1}` : order.product}</td>
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[order.status]}`}>
                       {order.status}

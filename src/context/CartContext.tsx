@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 
 export interface CartItem {
   id: number
@@ -18,18 +18,20 @@ interface CartContextProps {
   clearCart: () => void
   itemCount: number
   total: string
+  mounted: boolean
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('elara_cart')
-      return saved ? JSON.parse(saved) : []
-    }
-    return []
-  })
+  const [items, setItems] = useState<CartItem[]>([])
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('elara_cart')
+    if (saved) setItems(JSON.parse(saved))
+    setMounted(true)
+  }, [])
 
   const saveCart = (newItems: CartItem[]) => {
     setItems(newItems)
@@ -80,7 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, itemCount, total }}>
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, itemCount, total, mounted }}>
       {children}
     </CartContext.Provider>
   )

@@ -26,6 +26,10 @@ export async function POST(request: Request) {
     newCustomer.id = maxId + 1
     json.customers.push(newCustomer)
 
+    // Recalculate activeCustomers stat
+    if (!json.stats) json.stats = {}
+    json.stats.activeCustomers = json.customers.length
+
     await fs.writeFile(dataFilePath, JSON.stringify(json, null, 2), 'utf8')
     return NextResponse.json({ success: true, customer: newCustomer })
   } catch (error) {

@@ -6,10 +6,10 @@ import { useCart } from "@/context/CartContext"
 import { showSuccess } from "@/components/Admin/Notification"
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, clearCart, itemCount, total } = useCart()
+  const { items, removeFromCart, updateQuantity, clearCart, itemCount, total, mounted } = useCart()
 
-  const handleCheckout = () => {
-    showSuccess('Checkout', 'Checkout functionality coming soon!')
+  const handlePlaceOrder = () => {
+    window.location.href = '/order'
   }
 
   if (items.length === 0) {
@@ -24,6 +24,14 @@ export default function CartPage() {
               <div className="flex items-center gap-8">
                 <Link href="/#collection" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
                   Continue Shopping
+                </Link>
+                <Link href="/cart" className="relative text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
+                  Cart
+                  {mounted &&itemCount > 0 && (
+                    <span className="absolute -top-2 -right-3 bg-[var(--gold)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                      {itemCount}
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>
@@ -55,13 +63,21 @@ export default function CartPage() {
               <Link href="/#collection" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
                 Continue Shopping
               </Link>
+              <Link href="/cart" className="relative text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
+                Cart
+                {mounted &&itemCount > 0 && (
+                  <span className="absolute -top-2 -right-3 bg-[var(--gold)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
         </div>
       </nav>
 
       <main className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-playfair text-black mb-8">Your Cart ({itemCount} items)</h1>
+        <h1 className="text-4xl font-playfair text-black mb-8">{mounted ? `Your Cart (${itemCount} items)` : 'Your Cart'}</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
@@ -119,14 +135,14 @@ export default function CartPage() {
             <div className="border-t pt-4 mb-6">
               <div className="flex justify-between text-xl font-playfair text-black">
                 <span>Total</span>
-                <span>{total}</span>
+                {mounted &&<span>{total}</span>}
               </div>
             </div>
             <button
-              onClick={handleCheckout}
+              onClick={handlePlaceOrder}
               className="w-full py-3 bg-black text-white font-montserrat text-sm uppercase tracking-widest rounded-none hover:bg-[var(--gold)] hover:text-black transition-colors"
             >
-              Proceed to Checkout
+              Place Order
             </button>
             <button
               onClick={() => { clearCart(); showSuccess('Cart Cleared', 'All items removed from cart'); }}

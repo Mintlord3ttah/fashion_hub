@@ -63,8 +63,8 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
   }
 
   return (
-    <div className="p-4 bg-white rounded shadow-md max-w-lg mx-auto">
-      <h3 className="text-lg font-semibold mb-4">{product?.id ? 'Edit' : 'Add'} Product</h3>
+    <div className="p-4 bg-[#0B0B0B] text-white rounded shadow-md max-w-lg mx-auto border border-gray-800">
+      <h3 className="text-lg font-semibold mb-4 text-[#D4AF37]">{product?.id ? 'Edit' : 'Add'} Product</h3>
       {error && <p className="text-red-500 mb-2">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
@@ -72,7 +72,7 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
           placeholder="Image URL"
           value={formData.image}
           onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border border-gray-700 bg-[#0B0B0B] text-white px-2 py-1 rounded focus:border-[#D4AF37] focus:outline-none"
           required
         />
         <input
@@ -80,7 +80,7 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
           placeholder="Title"
           value={formData.title}
           onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border border-gray-700 bg-[#0B0B0B] text-white px-2 py-1 rounded focus:border-[#D4AF37] focus:outline-none"
           required
         />
         <textarea
@@ -88,7 +88,7 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
           placeholder="Description"
           value={formData.description}
           onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border border-gray-700 bg-[#0B0B0B] text-white px-2 py-1 rounded focus:border-[#D4AF37] focus:outline-none"
           required
         />
         <input
@@ -96,7 +96,7 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
           placeholder="Price"
           value={formData.price}
           onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border border-gray-700 bg-[#0B0B0B] text-white px-2 py-1 rounded focus:border-[#D4AF37] focus:outline-none"
           required
         />
         <input
@@ -104,32 +104,34 @@ export default function ProductForm({ product, onSuccess, onCancel }: Props) {
           placeholder="Category"
           value={formData.category || ''}
           onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
+          className="w-full border border-gray-700 bg-[#0B0B0B] text-white px-2 py-1 rounded focus:border-[#D4AF37] focus:outline-none"
         />
-        <label className="flex items-center space-x-2">
+        <label className="flex items-center space-x-2 text-gray-300">
           <input
             type="checkbox"
             name="isNew"
             checked={formData.isNew ?? false}
             onChange={handleChange}
+            className="rounded border-gray-700 bg-[#0B0B0B] text-[#D4AF37] focus:ring-[#D4AF37]"
           />
           <span>New Arrival</span>
         </label>
-        <label className="flex items-center space-x-2">
+        <label className="flex items-center space-x-2 text-gray-300">
           <input
             type="checkbox"
             name="isLimited"
             checked={formData.isLimited ?? false}
             onChange={handleChange}
+            className="rounded border-gray-700 bg-[#0B0B0B] text-[#D4AF37] focus:ring-[#D4AF37]"
           />
           <span>Limited Edition</span>
         </label>
         <div className="flex space-x-2 mt-2">
-          <button type="submit" className="bg-black text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-[#D4AF37] text-black px-4 py-2 rounded hover:bg-yellow-600 transition-colors">
             Save
           </button>
           {onCancel && (
-            <button type="button" onClick={onCancel} className="bg-gray-300 px-4 py-2 rounded">
+            <button type="button" onClick={onCancel} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">
               Cancel
             </button>
           )}

@@ -14,7 +14,7 @@ export default function ProductPage() {
   const [stock, setStock] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { addToCart } = useCart()
+  const { addToCart, itemCount } = useCart()
 
   useEffect(() => {
     if (!id) return
@@ -68,9 +68,21 @@ export default function ProductPage() {
             <Link href="/" className="text-2xl font-playfair font-bold text-black hover:text-[var(--gold)] transition-colors">
               Elara
             </Link>
-            <Link href="/#collection" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
-              Back to Collection
-            </Link>
+            <div className="flex items-center gap-8">
+              <Link href="/#collection" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
+                Back to Collection
+              </Link>
+              <Link href="/cart" className="relative hover:text-[var(--gold)] transition-colors" aria-label="Cart">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.5 6m0 0L6 18h12M6 18a2 2 0 1 0 4 0m8 0a2 2 0 1 0 4 0M6 12h12" />
+                </svg>
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-3 bg-[var(--gold)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -113,12 +125,8 @@ export default function ProductPage() {
               disabled={outOfStock}
               onClick={() => {
                 if (outOfStock) return;
-                if (isLoggedIn) {
-                  showSuccess('Proceeding to Checkout', `Redirecting to checkout for ${product.title}`);
-                } else {
-                  addToCart({ id: product.id, image: product.image, title: product.title, price: product.price });
-                  showSuccess('Added to Cart', `${product.title} added to cart`);
-                }
+                addToCart({ id: product.id, image: product.image, title: product.title, price: product.price });
+                showSuccess('Added to Cart', `${product.title} added to cart`);
               }}
               className={`px-8 py-3 font-montserrat text-sm uppercase tracking-widest rounded-none transition-colors ${outOfStock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-[var(--gold)] hover:text-black'}`}
             >

@@ -1,7 +1,7 @@
 {
   "stats": {
-    "totalRevenue": "$284,500",
-    "totalOrders": 1284,
+    "totalRevenue": "$32,650",
+    "totalOrders": 9,
     "productsSold": 3472,
     "activeCustomers": 892,
     "revenueTrend": 12,
@@ -212,6 +212,32 @@
       "status": "Shipped",
       "amount": "$1,100",
       "date": "2026-04-27"
+    },
+    {
+      "customer": "mint",
+      "email": "hiloyap200@badgerhole.com",
+      "product": "3 items",
+      "items": [
+        {
+          "title": "Accessories Set",
+          "quantity": 2,
+          "price": "$890"
+        },
+        {
+          "title": "Evening Dress",
+          "quantity": 1,
+          "price": "$2,850"
+        },
+        {
+          "title": "Summer Dress",
+          "quantity": 1,
+          "price": "$1,100"
+        }
+      ],
+      "status": "Pending",
+      "amount": "$5,730.00",
+      "date": "2026-05-08",
+      "id": "ORD-009"
     }
   ],
   "customers": [

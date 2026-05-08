@@ -19,6 +19,7 @@ import {
   ChevronRight
 } from 'lucide-react'
 import { useState } from 'react'
+// No internal state; collapsed controlled via props
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -33,10 +34,14 @@ const navItems = [
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
-export default function Sidebar() {
-  const pathname = usePathname()
-  const [collapsed, setCollapsed] = useState(false)
+interface SidebarProps {
+  collapsed: boolean
+  onToggle: () => void
+}
 
+export default function Sidebar({collapsed, onToggle}: SidebarProps) {
+  const pathname = usePathname()
+  
   const handleLogout = () => {
     document.cookie = 'admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
     window.location.href = '/auth/login'
@@ -61,7 +66,7 @@ export default function Sidebar() {
           </motion.span>
         )}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={onToggle}
           className="p-1 rounded hover:bg-gray-800 text-gray-400 hover:text-white"
         >
           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}

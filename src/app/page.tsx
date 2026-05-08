@@ -31,7 +31,18 @@ function ProductCard({
   const { addToCart } = useCart();
   const outOfStock = stock === 'Out of Stock';
   return (
-    <div className={`bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${outOfStock ? 'opacity-60' : ''}`}>
+    <div
+      className={`bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${outOfStock ? 'opacity-60' : 'cursor-pointer'}`}
+      onClick={() => {
+        if (outOfStock) return;
+        if (isLoggedIn) {
+          router.push(`/product?id=${id}`);
+        } else {
+          addToCart({ id, image, title, price });
+          showSuccess('Added to Cart', `${title} added to cart`);
+        }
+      }}
+    >
       <div className="relative h-80 overflow-hidden">
         <Image
           src={image}
@@ -53,21 +64,11 @@ function ProductCard({
             In Stock
           </span>
         )}
-        <button
-          disabled={outOfStock}
-          onClick={() => {
-            if (outOfStock) return;
-            if (isLoggedIn) {
-              router.push(`/product?id=${id}`);
-            } else {
-              addToCart({ id, image, title, price });
-              showSuccess('Added to Cart', `${title} added to cart`);
-            }
-          }}
+        <div
           className={`absolute bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-black text-white text-sm font-montserrat opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${outOfStock ? 'cursor-not-allowed' : ''}`}
         >
           {outOfStock ? 'Out of Stock' : isLoggedIn ? 'Shop Now' : 'Add to Cart'}
-        </button>
+        </div>
       </div>
       <div className="p-6">
         <h3 className="text-xl font-playfair font-semibold text-black mb-2">
@@ -154,8 +155,9 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="text-2xl font-playfair font-bold text-black hover:text-[var(--gold)] transition-colors">
-              Elara
+            <Link href="/" className="flex items-center space-x-2 hover:text-[var(--gold)] transition-colors">
+              <Image src="/icon (2).png" alt="Elara logo" width={60} height={60} />
+              <span className="text-2xl font-playfair font-bold text-black">Elara</span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link href="#collection" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
@@ -170,8 +172,10 @@ export default function Home() {
               <Link href="#testimonials" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
                 Testimonials
               </Link>
-              <Link href="/cart" className="relative text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
-                Cart
+              <Link href="/cart" className="relative hover:text-[var(--gold)] transition-colors" aria-label="Cart">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.5 6m0 0L6 18h12M6 18a2 2 0 1 0 4 0m8 0a2 2 0 1 0 4 0M6 12h12" />
+                </svg>
                 {itemCount > 0 && (
                   <span className="absolute -top-2 -right-3 bg-[var(--gold)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                     {itemCount}
@@ -297,6 +301,14 @@ export default function Home() {
                 );
               })
             )}
+          </div>
+          <div className="text-center mt-8">
+            <Link
+              href="/shopping"
+              className="inline-block px-8 py-3 border border-black text-black font-montserrat text-sm uppercase tracking-widest rounded-none hover:bg-black hover:text-white transition-colors"
+            >
+              See More
+            </Link>
           </div>
         </div>
       </section>
@@ -509,7 +521,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
-              <h3 className="font-playfair text-2xl font-bold mb-4">Elara</h3>
+              {/* <h3 className="font-playfair text-2xl font-bold mb-4">Elara</h3> */}
+              <Link href="/" className="flex items-center space-x-2 hover:text-[var(--gold)] transition-colors">
+              <Image src="/icon (2).png" alt="Elara logo" width={60} height={60} />
+              <span className="text-2xl font-playfair font-bold ">Elara</span>
+            </Link>
               <p className="text-sm text-gray-400 leading-relaxed">
                 Timeless elegance for the modern woman. Handcrafted luxury
                 pieces that tell your story.

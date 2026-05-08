@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 const statusColors: Record<string, string> = {
   Delivered: 'bg-green-100 text-green-800',
@@ -60,7 +61,7 @@ export default function RecentOrders() {
                 transition={{ delay: idx * 0.1 }}
                 className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
               >
-                <td className="py-3 font-medium text-gray-900 dark:text-white">{order.id}</td>
+                <td className="py-3 font-medium text-gray-900 dark:text-white"><Link href={`/admin/orders/${order.id}`} className="text-blue-600 hover:underline">{order.id}</Link></td>
                 <td className="py-3 text-gray-600 dark:text-gray-300">{order.customer}</td>
                 <td className="py-3 text-gray-600 dark:text-gray-300">{order.product}</td>
                 <td className="py-3">
