@@ -3,12 +3,16 @@
 import { motion } from 'framer-motion'
 import { Search, Mail, MailOpen, Trash2, Send } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import ComposeMessage from '@/components/Admin/ComposeMessage'
+import { showSuccess, showError } from '@/components/Admin/Notification'
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<number | null>(null)
+  const [showCompose, setShowCompose] = useState(false)
+  const [customers, setCustomers] = useState<any[]>([])
 
   useEffect(() => {
     fetch('/api/admin/messages')
@@ -22,6 +26,31 @@ export default function MessagesPage() {
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    fetch('/api/admin/customers')
+      .then(res => res.json())
+      .then(data => setCustomers(data))
+      .catch(err => console.error('Failed to load customers', err))
+  }, [])
+
+  const handleSend = async (to: string, subject: string, body: string) => {
+    try {
+      const res = await fetch('/api/admin/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, subject, body }),
+      })
+      if (res.ok) {
+        showSuccess('Sent', 'Message sent successfully')
+        setShowCompose(false)
+      } else {
+        showError('Send Failed', 'Failed to send message')
+      }
+    } catch (err: any) {
+      showError('Send Failed', err.message || 'Failed to send message')
+    }
+  }
 
   const filtered = messages.filter(m =>
     m.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -41,11 +70,22 @@ export default function MessagesPage() {
           <h1 className="text-3xl font-playfair text-gray-900 dark:text-white">Messages</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Customer inquiries and support</p>
         </div>
-        <button className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black rounded-lg font-medium hover:bg-[#C49F30] transition-colors">
+        <button
+          onClick={() => setShowCompose(true)}
+          className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-black rounded-lg font-medium hover:bg-[#C49F30] transition-colors"
+        >
           <Send size={16} />
           <span className="text-sm">Compose</span>
         </button>
       </div>
+
+      {showCompose && (
+        <ComposeMessage
+          onClose={() => setShowCompose(false)}
+          onSend={handleSend}
+          customers={customers}
+        />
+      )}
 
       <div className="relative mb-6">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />

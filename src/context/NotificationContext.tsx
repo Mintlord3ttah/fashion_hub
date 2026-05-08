@@ -53,22 +53,28 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   // Initialize SSE stream directly (avoids calling useNotification)
   useEffect(() => {
     const source = new EventSource('/api/notifications/stream')
-    source.onmessage = (e) => {
+    source.onmessage = (e: MessageEvent) => {
       try {
         const data = JSON.parse(e.data)
-        addNotification({
-          type: data.type,
-          title: data.title,
-          message: data.message,
-          link: data.link,
-        })
+        if (data.type && data.title) {
+          addNotification({
+            type: data.type,
+            title: data.title,
+            message: data.message,
+            link: data.link,
+          })
+        }
       } catch (err) {
         console.error('Failed to parse notification', err)
       }
     }
-    source.onerror = (err) => {
-      console.error('Notification stream error', err)
-      source.close()
+    source.onerror = (ev: Event) => {
+      // Only log real errors, not normal reconnects
+      if (source.readyState === EventSource.CLOSED) {
+        console.error('Notification stream closed')
+      } else if (source.readyState === EventSource.CONNECTING) {
+        console.log('Notification stream reconnecting...')
+      }
     }
     return () => source.close()
   }, [addNotification])
@@ -103,10 +109,10 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
               exit={{ opacity: 0, x: 300 }}
               className={`p-4 rounded-lg shadow-lg border ${
                 notification.type === 'success'
-                  ? 'bg-green-50 border-green-200'
+                  ? 'bg-green-50 border-green-200 dark:bg-green-900/30 dark:border-green-800'
                   : notification.type === 'error'
-                  ? 'bg-red-50 border-red-200'
-                  : 'bg-white border-gray-200'
+                  ? 'bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800'
+                  : 'bg-white border-gray-200 dark:bg-[#1a1a1a] dark:border-gray-700'
               }`}
             >
               <div className="flex items-start gap-3">

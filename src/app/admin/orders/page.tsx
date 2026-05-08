@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { Search, Filter, Download, Eye, Pencil, Trash2 } from 'lucide-react'
 import { showConfirm, showSuccess } from '@/components/Admin/Notification'
+import { exportToCSV, formatOrdersForExport } from '@/lib/export'
 
 const statusColors: Record<string, string> = {
   Delivered: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
@@ -20,6 +21,8 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true)
   const [filterStatus, setFilterStatus] = useState('All')
   const [search, setSearch] = useState('')
+  const [selectedOrderIds, setSelectedOrderIds] = useState<number[]>([])
+  const [showBulkMenu, setShowBulkMenu] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/orders')
@@ -41,6 +44,11 @@ export default function OrdersPage() {
     return matchStatus && matchSearch
   })
 
+  const handleExport = () => {
+    const data = formatOrdersForExport(filtered)
+    exportToCSV(data, `orders-${new Date().toISOString().slice(0,10)}.csv`)
+  }
+
   if (loading) return <div className="p-6">Loading orders...</div>
 
   return (
@@ -55,10 +63,64 @@ export default function OrdersPage() {
           <h1 className="text-3xl font-playfair text-gray-900 dark:text-white">Orders</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Manage customer orders</p>
         </div>
-        <button className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-          <Download size={16} />
-          <span className="text-sm">Export</span>
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleExport}
+            className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <Download size={16} />
+            <span className="text-sm">Export</span>
+          </button>
+          {selectedOrderIds.length > 0 && (
+            <>
+              <button
+                onClick={() => {
+                  const newStatus = prompt('Update status for selected orders:', 'Processing')
+                  if (newStatus) {
+                    const updates = selectedOrderIds.map(id =>
+                      fetch(`/api/admin/orders/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus }),
+                      })
+                    )
+                    Promise.all(updates).then(() => {
+                      setOrders(prev =>
+                        prev.map(o =>
+                          selectedOrderIds.includes(o.id) ? {...o, status: newStatus} : o
+                        )
+                      )
+                      setSelectedOrderIds([])
+                    })
+                  }
+                }}
+                className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <Pencil size={16} />
+                <span className="text-sm">Edit Status</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm(`Delete ${selectedOrderIds.length} selected order(s)?`)) {
+                    const deletions = selectedOrderIds.map(id =>
+                      fetch(`/api/admin/orders/${id}`, { method: 'DELETE' })
+                    )
+                    Promise.all(deletions).then(() => {
+                      setOrders(prev =>
+                        prev.filter(o => !selectedOrderIds.includes(o.id))
+                      )
+                      setSelectedOrderIds([])
+                    })
+                  }
+                }}
+                className="mt-4 md:mt-0 flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <Trash2 size={16} />
+                <span className="text-sm">Delete Selected</span>
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Filters */}
@@ -96,6 +158,22 @@ export default function OrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 dark:border-gray-800 text-left text-gray-500 dark:text-gray-400">
+                <th className="p-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedOrderIds.length === filtered.length && filtered.length > 0}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedOrderIds(filtered.map(o => o.id))
+                        } else {
+                          setSelectedOrderIds([])
+                        }
+                      }}
+                      className="h-4 w-4 text-[#D4AF37] border-gray-300 rounded"
+                    />
+                  </div>
+                </th>
                 <th className="p-4">Order ID</th>
                 <th className="p-4">Customer</th>
                 <th className="p-4">Product</th>
@@ -112,8 +190,26 @@ export default function OrdersPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
+                  className={`border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors ${
+                    selectedOrderIds.includes(order.id) ? 'bg-gray-50 dark:bg-gray-800/20' : ''
+                  }`}
                 >
+                  <td className="p-2">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedOrderIds.includes(order.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedOrderIds([...selectedOrderIds, order.id])
+                          } else {
+                            setSelectedOrderIds(selectedOrderIds.filter(id => id !== order.id))
+                          }
+                        }}
+                        className="h-4 w-4 text-[#D4AF37] border-gray-300 rounded"
+                      />
+                    </div>
+                  </td>
                   <td className="p-4 font-medium text-gray-900 dark:text-white">{order.id}</td>
                   <td className="p-4">
                     <div>
