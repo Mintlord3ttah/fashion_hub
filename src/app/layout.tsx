@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { CartProvider } from "@/context/CartContext";
 import Head from "next/head";
 
 const playfair = Playfair_Display({
@@ -46,9 +47,11 @@ export default function RootLayout({
             }}
           />
         </Head>
-        <NotificationProvider>
-          {children}
-        </NotificationProvider>
+        <CartProvider>
+          <NotificationProvider>
+            {children}
+          </NotificationProvider>
+        </CartProvider>
       </body>
     </html>
   );

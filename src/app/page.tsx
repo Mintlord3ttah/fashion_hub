@@ -3,23 +3,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { showSuccess } from "@/components/Admin/Notification";
 
 // Utility Card Components
 function ProductCard({
+  id,
   image,
   title,
   description,
   price,
   isLimited,
   stock,
+  isLoggedIn,
 }: {
+  id: number;
   image: string;
   title: string;
   description: string;
   price: string;
   isLimited?: boolean;
   stock?: string;
+  isLoggedIn?: boolean;
 }) {
+  const router = useRouter();
+  const { addToCart } = useCart();
   const outOfStock = stock === 'Out of Stock';
   return (
     <div className={`bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${outOfStock ? 'opacity-60' : ''}`}>
@@ -46,9 +55,18 @@ function ProductCard({
         )}
         <button
           disabled={outOfStock}
+          onClick={() => {
+            if (outOfStock) return;
+            if (isLoggedIn) {
+              router.push(`/product?id=${id}`);
+            } else {
+              addToCart({ id, image, title, price });
+              showSuccess('Added to Cart', `${title} added to cart`);
+            }
+          }}
           className={`absolute bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-black text-white text-sm font-montserrat opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${outOfStock ? 'cursor-not-allowed' : ''}`}
         >
-          {outOfStock ? 'Out of Stock' : 'Shop Now'}
+          {outOfStock ? 'Out of Stock' : isLoggedIn ? 'Shop Now' : 'Add to Cart'}
         </button>
       </div>
       <div className="p-6">
@@ -85,6 +103,8 @@ export default function Home() {
   const [products, setProducts] = useState<any[]>([]);
   const [discounts, setDiscounts] = useState<any[]>([]);
   const [stock, setStock] = useState<any[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { itemCount } = useCart();
 
   useEffect(() => {
     // Initial fetch
@@ -113,6 +133,19 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me')
+        setIsLoggedIn(res.ok)
+      } catch {
+        setIsLoggedIn(false)
+      }
+    }
+    checkAuth()
+  }, []);
+
     // Removed redundant fetch functions; polling handled above
 
   return (
@@ -136,6 +169,14 @@ export default function Home() {
               </Link>
               <Link href="#testimonials" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
                 Testimonials
+              </Link>
+              <Link href="/cart" className="relative text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
+                Cart
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-3 bg-[var(--gold)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {itemCount}
+                  </span>
+                )}
               </Link>
               <button
                 onClick={async () => {
@@ -176,27 +217,13 @@ export default function Home() {
               </div>
               <div className="flex gap-4 animate-[fadeInUp_1s_ease-out_forwards] delay-[400ms]">
                 <button
-                  onClick={async () => {
-                    const res = await fetch('/api/admin/login', { method: 'HEAD' })
-                    if (res.ok) {
-                      window.location.href = '/admin/dashboard'
-                    } else {
-                      window.location.href = '/auth/login'
-                    }
-                  }}
+                  onClick={() => document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' })}
                   className="px-8 py-4 bg-black text-white font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-[var(--gold)] hover:text-black transition-colors"
                 >
                   Shop Collection
                 </button>
                 <button
-                  onClick={async () => {
-                    const res = await fetch('/api/admin/login', { method: 'HEAD' })
-                    if (res.ok) {
-                      window.location.href = '/admin/dashboard'
-                    } else {
-                      window.location.href = '/auth/login'
-                    }
-                  }}
+                  onClick={() => document.getElementById('new-arrivals')?.scrollIntoView({ behavior: 'smooth' })}
                   className="px-8 py-4 border border-black text-black font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-black hover:text-white transition-colors"
                 >
                   Explore New Arrivals
@@ -205,10 +232,10 @@ export default function Home() {
             </div>
             <div className="relative h-[70vh] lg:h-[80vh] animate-[fadeInUp_1s_ease-out_forwards] delay-[600ms]">
               <Image
-                src="/backgroundimg.png"
+                src="/background-2.png"
                 alt="Luxury Fashion Model"
                 fill
-                className="object-cover object-center"
+                className="object-top  "
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
@@ -258,7 +285,7 @@ export default function Home() {
                 const stockInfo = stock.find((s: any) => s.id === p.id);
                 const stockStatus = stockInfo ? stockInfo.status : 'Unknown';
                 return (
-                  <ProductCard
+                  <ProductCard id={p.id} isLoggedIn={isLoggedIn}
                     key={p.id}
                     image={p.image}
                     title={p.title}
@@ -341,7 +368,7 @@ export default function Home() {
                 const stockInfo = stock.find((s: any) => s.id === p.id);
                 const stockStatus = stockInfo ? stockInfo.status : 'Unknown';
                 return (
-                  <ProductCard
+                  <ProductCard id={p.id} isLoggedIn={isLoggedIn}
                     key={p.id}
                     image={p.image}
                     title={p.title}
@@ -405,14 +432,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <button
-              onClick={async () => {
-                const res = await fetch('/api/admin/login', { method: 'HEAD' })
-                if (res.ok) {
-                  window.location.href = '/admin/dashboard'
-                } else {
-                  window.location.href = '/auth/login'
-                }
-              }}
+              onClick={() => document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' })}
               className="px-8 py-4 bg-[var(--gold)] text-black font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-[var(--gold-hover)] transition-colors"
             >
               Shop Now
