@@ -111,9 +111,7 @@ export default function CartPage() {
                 <div key={item.id} className="flex justify-between text-sm">
                   <span className="text-gray-600">{item.title} x{item.quantity}</span>
                   <span className="text-black font-semibold">
-                    {parseInt(item.price.replace(/[^0-9]/g, '')) * item.quantity >= 0
-                      ? `$${(parseInt(item.price.replace(/[^0-9]/g, '')) * item.quantity).toLocaleString()}`
-                      : item.price}
+                    ${(parseInt(item.price.replace(/[^0-9]/g, '')) * item.quantity).toLocaleString()}
                   </span>
                 </div>
               ))}
@@ -131,7 +129,7 @@ export default function CartPage() {
               Proceed to Checkout
             </button>
             <button
-              onClick={() => { clearCart(); showSuccess('Cart Cleared', 'All items removed from cart') }}
+              onClick={() => { clearCart(); showSuccess('Cart Cleared', 'All items removed from cart'); }}
               className="w-full mt-4 py-3 border border-gray-300 text-gray-600 font-montserrat text-sm uppercase tracking-widest rounded-none hover:bg-gray-100 transition-colors"
             >
               Clear Cart

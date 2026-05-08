@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { showSuccess } from '@/components/Admin/Notification'
+import { useCart } from '@/context/CartContext'
 
 export default function ProductPage() {
   const searchParams = useSearchParams()
@@ -12,6 +13,8 @@ export default function ProductPage() {
   const [product, setProduct] = useState<any>(null)
   const [stock, setStock] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { addToCart } = useCart()
 
   useEffect(() => {
     if (!id) return
@@ -37,6 +40,19 @@ export default function ProductPage() {
     }
     fetchData()
   }, [id])
+
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me')
+        setIsLoggedIn(res.ok)
+      } catch {
+        setIsLoggedIn(false)
+      }
+    }
+    checkAuth()
+  }, [])
 
   if (!id) return <div className="min-h-screen flex items-center justify-center text-gray-500">Product ID missing</div>
   if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-500">Loading...</div>
@@ -95,10 +111,18 @@ export default function ProductPage() {
             </div>
             <button
               disabled={outOfStock}
-              onClick={() => !outOfStock && showSuccess('Added to Cart', `Product ${product.title} added to cart`)}
+              onClick={() => {
+                if (outOfStock) return;
+                if (isLoggedIn) {
+                  showSuccess('Proceeding to Checkout', `Redirecting to checkout for ${product.title}`);
+                } else {
+                  addToCart({ id: product.id, image: product.image, title: product.title, price: product.price });
+                  showSuccess('Added to Cart', `${product.title} added to cart`);
+                }
+              }}
               className={`px-8 py-3 font-montserrat text-sm uppercase tracking-widest rounded-none transition-colors ${outOfStock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-black text-white hover:bg-[var(--gold)] hover:text-black'}`}
             >
-              {outOfStock ? 'Out of Stock' : 'Shop Now'}
+              {outOfStock ? 'Out of Stock' : isLoggedIn ? 'Buy Now' : 'Add to Cart'}
             </button>
             {product.isNew && (
               <p className="text-sm text-green-600">New Arrival</p>
