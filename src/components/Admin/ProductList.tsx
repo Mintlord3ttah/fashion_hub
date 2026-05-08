@@ -71,12 +71,12 @@ export default function ProductList() {
     fetchProducts()
   }
 
-  if (loading) return <div className="p-4">Loading products...</div>
+  if (loading) return <div className="p-4 text-gray-600 dark:text-gray-300">Loading products...</div>
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white dark:bg-[#0B0B0B]">
       <div className="flex justify-between mb-4">
-        <h2 className="text-2xl font-playfair">Products</h2>
+        <h2 className="text-2xl font-playfair text-gray-900 dark:text-white">Products</h2>
         <button
           onClick={handleAdd}
           className="bg-black text-white px-4 py-2 rounded hover:bg-[var(--gold)] hover:text-black transition"
@@ -101,39 +101,39 @@ export default function ProductList() {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-beige">
-              <th className="border p-2">ID</th>
-              <th className="border p-2">Image</th>
-              <th className="border p-2">Title</th>
-              <th className="border p-2">Price</th>
-              <th className="border p-2">Category</th>
-              <th className="border p-2">New</th>
-              <th className="border p-2">Limited</th>
-              <th className="border p-2">Actions</th>
+            <tr className="bg-beige dark:bg-gray-800">
+              <th className="border p-2 text-gray-900 dark:text-gray-200">ID</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Image</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Title</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Price</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Category</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">New</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Limited</th>
+              <th className="border p-2 text-gray-900 dark:text-gray-200">Actions</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
-                <td className="border p-2">{product.id}</td>
-                <td className="border p-2">
+              <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.id}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">
                   <img src={product.image} alt={product.title} className="w-16 h-16 object-cover" />
                 </td>
-                <td className="border p-2">{product.title}</td>
-                <td className="border p-2">{product.price}</td>
-                <td className="border p-2">{product.category || '-'}</td>
-                <td className="border p-2">{product.isNew ? 'Yes' : 'No'}</td>
-                <td className="border p-2">{product.isLimited ? 'Yes' : 'No'}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.title}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.price}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.category || '-'}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.isNew ? 'Yes' : 'No'}</td>
+                <td className="border p-2 text-gray-900 dark:text-gray-200">{product.isLimited ? 'Yes' : 'No'}</td>
                 <td className="border p-2 space-x-2">
                   <button
                     onClick={() => handleEdit(product)}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 dark:text-blue-400 hover:underline dark:hover:text-blue-300"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(product.id)}
-                    className="text-red-600 hover:underline"
+                    className="text-red-600 dark:text-red-400 hover:underline dark:hover:text-red-300"
                   >
                     Delete
                   </button>

@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 // Utility Card Components
 function ProductCard({
@@ -7,14 +10,19 @@ function ProductCard({
   title,
   description,
   price,
+  isLimited,
+  stock,
 }: {
   image: string;
   title: string;
   description: string;
   price: string;
+  isLimited?: boolean;
+  stock?: string;
 }) {
+  const outOfStock = stock === 'Out of Stock';
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+    <div className={`bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${outOfStock ? 'opacity-60' : ''}`}>
       <div className="relative h-80 overflow-hidden">
         <Image
           src={image}
@@ -22,11 +30,25 @@ function ProductCard({
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <span className="absolute top-2 right-2 px-3 py-1 bg-[var(--gold)] text-white text-xs font-montserrat uppercase tracking-wider">
-          Limited
-        </span>
-        <button className="absolute bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-black text-white text-sm font-montserrat opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Shop Now
+        {isLimited && (
+          <span className="absolute top-2 right-2 px-3 py-1 bg-[var(--gold)] text-white text-xs font-montserrat uppercase tracking-wider">
+            Limited
+          </span>
+        )}
+        {outOfStock ? (
+          <span className="absolute top-2 left-2 px-3 py-1 bg-red-600 text-white text-xs font-montserrat uppercase">
+            Out of Stock
+          </span>
+        ) : (
+          <span className="absolute top-2 left-2 px-3 py-1 bg-green-600 text-white text-xs font-montserrat uppercase">
+            In Stock
+          </span>
+        )}
+        <button
+          disabled={outOfStock}
+          className={`absolute bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-black text-white text-sm font-montserrat opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${outOfStock ? 'cursor-not-allowed' : ''}`}
+        >
+          {outOfStock ? 'Out of Stock' : 'Shop Now'}
         </button>
       </div>
       <div className="p-6">
@@ -60,6 +82,39 @@ function TestimonialCard({
 }
 
 export default function Home() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [discounts, setDiscounts] = useState<any[]>([]);
+  const [stock, setStock] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Initial fetch
+    const fetchData = async () => {
+      try {
+        const [prodRes, discRes, stockRes] = await Promise.all([
+          fetch('/api/products'),
+          fetch('/api/discounts'),
+          fetch('/api/products/stock'),
+        ]);
+        const [prodData, discData, stockData] = await Promise.all([
+          prodRes.json(),
+          discRes.json(),
+          stockRes.json(),
+        ]);
+        setProducts(prodData);
+        setDiscounts(discData);
+        setStock(stockData);
+      } catch (e) {
+        console.error('Failed to fetch data', e);
+      }
+    };
+    fetchData();
+    // Poll every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+    // Removed redundant fetch functions; polling handled above
+
   return (
     <div className="min-h-screen bg-white text-black font-sans">
       {/* Navigation */}
@@ -82,10 +137,17 @@ export default function Home() {
               <Link href="#testimonials" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
                 Testimonials
               </Link>
-              <Link href="/admin" className="text-sm font-montserrat hover:text-[var(--gold)] transition-colors">
-                Admin
-              </Link>
-              <button className="px-4 py-2 bg-black text-white text-sm font-montserrat rounded hover:bg-[var(--gold)] hover:text-black transition-colors">
+              <button
+                onClick={async () => {
+                  const res = await fetch('/api/auth/me')
+                  if (res.ok) {
+                    window.location.href = '/admin/dashboard'
+                  } else {
+                    window.location.href = '/auth/login'
+                  }
+                }}
+                className="px-4 py-2 bg-black text-white text-sm font-montserrat rounded hover:bg-[var(--gold)] hover:text-black transition-colors"
+              >
                 Join List
               </button>
             </div>
@@ -113,18 +175,32 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex gap-4 animate-[fadeInUp_1s_ease-out_forwards] delay-[400ms]">
-                <Link
-                  href="#collection"
+                <button
+                  onClick={async () => {
+                    const res = await fetch('/api/admin/login', { method: 'HEAD' })
+                    if (res.ok) {
+                      window.location.href = '/admin/dashboard'
+                    } else {
+                      window.location.href = '/auth/login'
+                    }
+                  }}
                   className="px-8 py-4 bg-black text-white font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-[var(--gold)] hover:text-black transition-colors"
                 >
                   Shop Collection
-                </Link>
-                <Link
-                  href="#new-arrivals"
+                </button>
+                <button
+                  onClick={async () => {
+                    const res = await fetch('/api/admin/login', { method: 'HEAD' })
+                    if (res.ok) {
+                      window.location.href = '/admin/dashboard'
+                    } else {
+                      window.location.href = '/auth/login'
+                    }
+                  }}
                   className="px-8 py-4 border border-black text-black font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-black hover:text-white transition-colors"
                 >
                   Explore New Arrivals
-                </Link>
+                </button>
               </div>
             </div>
             <div className="relative h-[70vh] lg:h-[80vh] animate-[fadeInUp_1s_ease-out_forwards] delay-[600ms]">
@@ -145,6 +221,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Discount Banner */}
+      {discounts.length > 0 && (
+        <section className="py-8 bg-black text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap justify-center gap-4">
+              {discounts.map((d) => (
+                <span key={d.id} className="bg-[var(--gold)] text-black px-3 py-1 rounded-full text-sm font-montserrat">
+                  {d.code} – {d.value} off (expires {d.expiry})
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Featured Collection */}
       <section className="py-24 bg-[var(--beige)]" id="collection">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,54 +251,25 @@ export default function Home() {
             Handcrafted designs that embody sophistication and modern femininity.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <ProductCard
-              image="/Evening_Dress.jfif"
-              title="Evening Dress"
-              description="Silk chiffon evening gown with intricate beading"
-              price="$2,850"
-            />
-            <ProductCard
-              image="/Luxury_Casual_Wear.jfif"
-              title="Luxury Casual Wear"
-              description="Cashmere blend sweater with tailored trousers"
-              price="$1,250"
-            />
-            <ProductCard
-              image="/pearl_blouse.jfif"
-              title="Statement Piece"
-              description="Embroidered silk blouse with pearl details"
-              price="$1,980"
-            />
-            <ProductCard
-              image="/Velvet_coat.jfif"
-              title="Limited Edition"
-              description="Exclusive velvet coat with fur trim"
-              price="$4,200"
-            />
-            <ProductCard
-              image="/leather_bag_shoes.jfif"
-              title="Accessories Set"
-              description="Leather clutch with matching belt"
-              price="$890"
-            />
-            <ProductCard
-              image="/formal_suit.jfif"
-              title="Formal Suit"
-              description="Tailored wool suit with satin lapels"
-              price="$2,400"
-            />
-            <ProductCard
-              image="/summer_dress.jfif"
-              title="Summer Dress"
-              description="Lightweight linen dress in pastel tones"
-              price="$1,100"
-            />
-            <ProductCard
-              image="/earings.jfif"
-              title="Jewelry Set"
-              description="Pearl necklace with matching earrings"
-              price="$5,500"
-            />
+            {products.length === 0 ? (
+              <p className="col-span-full text-center text-gray-500">Loading products...</p>
+            ) : (
+              products.map((p) => {
+                const stockInfo = stock.find((s: any) => s.id === p.id);
+                const stockStatus = stockInfo ? stockInfo.status : 'Unknown';
+                return (
+                  <ProductCard
+                    key={p.id}
+                    image={p.image}
+                    title={p.title}
+                    description={p.description}
+                    price={p.price}
+                    isLimited={p.isLimited}
+                    stock={stockStatus}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
       </section>
@@ -272,24 +334,25 @@ export default function Home() {
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <ProductCard
-              image="/Spring_blossom_dress.jfif"
-              title="Spring Blossom Dress"
-              description="Floral print midi dress with ruffle details"
-              price="$1,350"
-            />
-            <ProductCard
-              image="/artisan_blazer.jfif"
-              title="Artisan Blazer"
-              description="Hand-tailored tweed blazer with gold buttons"
-              price="$1,890"
-            />
-            <ProductCard
-              image="/Evening_cape.jfif"
-              title="Evening Cape"
-              description="Silk organza cape with crystal embellishments"
-              price="$2,200"
-            />
+            {products.filter(p => p.isNew).length === 0 ? (
+              <p className="col-span-full text-center text-gray-500">No new arrivals at the moment.</p>
+            ) : (
+              products.filter(p => p.isNew).map((p) => {
+                const stockInfo = stock.find((s: any) => s.id === p.id);
+                const stockStatus = stockInfo ? stockInfo.status : 'Unknown';
+                return (
+                  <ProductCard
+                    key={p.id}
+                    image={p.image}
+                    title={p.title}
+                    description={p.description}
+                    price={p.price}
+                    isLimited={p.isLimited}
+                    stock={stockStatus}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
       </section>
@@ -341,12 +404,19 @@ export default function Home() {
             and timeless style.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/shop"
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/admin/login', { method: 'HEAD' })
+                if (res.ok) {
+                  window.location.href = '/admin/dashboard'
+                } else {
+                  window.location.href = '/auth/login'
+                }
+              }}
               className="px-8 py-4 bg-[var(--gold)] text-black font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-[var(--gold-hover)] transition-colors"
             >
               Shop Now
-            </Link>
+            </button>
             <Link
               href="#newsletter"
               className="px-8 py-4 border border-white text-white font-montserrat text-sm tracking-widest uppercase rounded-none hover:bg-white hover:text-black transition-colors"

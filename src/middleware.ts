@@ -4,8 +4,8 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Allow admin login page and login API without authentication
-  if (pathname.startsWith('/admin/login') || pathname.startsWith('/api/admin/login')) {
+  // Allow auth pages and auth API without authentication
+  if (pathname.startsWith('/auth/') || pathname.startsWith('/api/auth/')) {
     return NextResponse.next()
   }
 
@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
         )
       }
       // For pages, redirect to login
-      const loginUrl = new URL('/admin/login', request.url)
+      const loginUrl = new URL('/auth/login', request.url)
       loginUrl.searchParams.set('callbackUrl', pathname)
       return NextResponse.redirect(loginUrl)
     }
